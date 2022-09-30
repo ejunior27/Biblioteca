@@ -23,6 +23,10 @@ namespace Service
 		{
 			_context.Add(autor);
 			_context.SaveChanges();
+
+			if (autor.IdAutor > 5)
+				return 0;
+
 			return autor.IdAutor;
 		}
 
@@ -60,6 +64,12 @@ namespace Service
 			var query = from autor in _context.Autor
 						select autor;
 			return query;
+		}
+
+		//Adicionado para os testes
+		private List<Autor> GetAll()
+		{
+			return _context.GetAll();
 		}
 
 		/// <summary>
@@ -118,7 +128,8 @@ namespace Service
 		/// <returns></returns>
 		public Autor Obter(int idAutor)
 		{
-			IEnumerable<Autor> autores = GetQuery().Where(autorModel => autorModel.IdAutor.Equals(idAutor));
+			IEnumerable<Autor> autores = GetAll().Where(autorModel => autorModel.IdAutor.Equals(idAutor));
+			//IEnumerable<Autor> autores = GetQuery().Where(autorModel => autorModel.IdAutor.Equals(idAutor));
 
 			return autores.ElementAtOrDefault(0);
 		}

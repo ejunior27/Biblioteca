@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Core
 {
-    public partial class BibliotecaContext : DbContext
+    public partial class BibliotecaContext : DbContext, IBibliotecaContext
     {
         public BibliotecaContext()
         {
@@ -29,6 +31,12 @@ namespace Core
         public virtual DbSet<Pessoa> Pessoa { get; set; }
         public virtual DbSet<Situacaolivro> Situacaolivro { get; set; }
 
+        //Adicionado para os testes
+        public virtual List<Autor> GetAll()
+        {
+            return Autor.ToList();
+        }
+    
 //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //        {
 //            if (!optionsBuilder.IsConfigured)
