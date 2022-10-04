@@ -8,7 +8,7 @@ namespace Mappers
 	{
 		public AutorProfile()
 		{
-			CreateMap<AutorModel, Autor>().ReverseMap();
+			CreateMap<AutorModel, Autor>().ReverseMap();			
 		}
 	}
 }
