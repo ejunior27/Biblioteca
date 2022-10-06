@@ -28,33 +28,33 @@ namespace Biblioteca.Tests.Service
             _subject = new AutorService(_mockBibliotecaContext);
         }
 
-        [Fact]
-        public void Inserir_HappyDay_RetornaIdAutor()
-        {
-            //Arrange
-            //_mockBibliotecaContext.Setup(mock => mock.GetAll())
-            //    .Returns(GetAutoresFake());
+        //[Fact]
+        //public void Inserir_HappyDay_RetornaIdAutor()
+        //{
+        //    //Arrange
+        //    //_mockBibliotecaContext.Setup(mock => mock.GetAll())
+        //    //    .Returns(GetAutoresFake());
 
-            _mockBibliotecaContext.GetAll().Returns(GetAutoresFake());
+        //    _mockBibliotecaContext.GetAll().Returns(GetAutoresFake());
 
-            //Act
-            var idRetorno = _subject.Inserir(new Autor
-            {
-                AnoNascimento = new DateTime(1997,1,6),
-                IdAutor = 3,
-                Nome = "J.K. Rowling"                
-            });
+        //    //Act
+        //    var idRetorno = _subject.Inserir(new Autor
+        //    {
+        //        AnoNascimento = new DateTime(1997,1,6),
+        //        IdAutor = 3,
+        //        Nome = "J.K. Rowling"                
+        //    });
 
-            var autor = _subject.Obter(3);
+        //    var autor = _subject.Obter(3);
 
-            //Assert
-            idRetorno.Should()
-                .Be(3);
+        //    //Assert
+        //    idRetorno.Should()
+        //        .Be(3);
 
-            autor.Should()
-                .NotBeNull();
+        //    autor.Should()
+        //        .NotBeNull();
 
-        }
+        //}
 
         [Fact]
         public void Inserir_IdMaiorQue5_RetornaIdZero()

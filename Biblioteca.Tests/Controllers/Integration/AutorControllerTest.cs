@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BibliotecaAPI;
+using BibliotecaAPI.Controllers;
 using Castle.Core.Resource;
 using Core;
 using FluentAssertions;
@@ -25,29 +26,20 @@ namespace Biblioteca.Tests.Controllers.Integration
     {
         //api/autor/
 
-        private readonly HttpClient _httpClientTest;
         private readonly Mock<IAutorService> _mockAutorService;
         private readonly Mock<IMapper> _mockMapper;
+        private AutorController _subject;
 
         public AutorControllerTest()
         {
-            var server = new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>()
-                .ConfigureServices(services =>
-                {
-                    services.RemoveAll(typeof(BibliotecaContext));
-                    services.AddDbContext<BibliotecaContext>(options => options.UseInMemoryDatabase("Biblioteca"));
-                })
-                );
-
-            _httpClientTest = server.CreateClient();
-
             _mockAutorService = new();
             _mockMapper = new();
+
+            _subject = new AutorController(_mockAutorService.Object, _mockMapper.Object);
         }
 
         [Fact]
-        public async Task IntegrationAutorController_HappyDay_ListAutorModel()
+        public void IntegrationAutorController_HappyDay_ListAutorModel()
         {
             //Arrange
             _mockAutorService.Setup(x => x.ObterTodos())
@@ -57,7 +49,7 @@ namespace Biblioteca.Tests.Controllers.Integration
                     new Autor{IdAutor = 2, Nome = "Graciliano Ramos"},
                 });
 
-            _mockMapper.Setup(x => x.Map<List<AutorModel>>(It.IsAny<List<Autor>>()))
+            _mockMapper.Setup(x => x.Map<List<AutorModel>>(It.IsAny<IEnumerable<Autor>>()))
                 .Returns(new List<AutorModel>
                 {
                     new AutorModel{IdAutor = 1, Nome = "Machado de Assis"},
@@ -65,16 +57,10 @@ namespace Biblioteca.Tests.Controllers.Integration
                 });
 
             //Act
-            var response = await _httpClientTest.GetAsync("/api/autor");
+            var retorno = _subject.Get();
 
             //Assert
-            response.IsSuccessStatusCode.Should()
-                .BeTrue();
-
-            var autorJsonString = await response.Content.ReadAsStringAsync();
-            var listaAutoresRetorno = JsonConvert.DeserializeObject<List<AutorModel>>(autorJsonString);
-
-            listaAutoresRetorno.Should()
+            retorno.Value.Should()
                 .BeEquivalentTo(new List<AutorModel>
                 {
                     new AutorModel{IdAutor = 1, Nome = "Machado de Assis"},
